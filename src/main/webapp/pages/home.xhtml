@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Home</title>
+    <link rel="StyleSheet" type="text/css" href="../css/estilo.css"/>
+</h:head>
+<h:body>
+
+    <b:navBar rendered="false" brand="Bartpapo" brandHref="#" fluid="true">
+
+        <b:dropMenu value="Grupos" iconAwesome="fa-wechat">
+            <b:navLink value="Criar" href="#"></b:navLink>
+            <b:navLink value="Ver"
+                       onclick="PF('verGrupo').show()"></b:navLink>
+        </b:dropMenu>
+
+        <b:dropMenu value="Amigos" iconAwesome="fa-group">
+            <b:navLink value="Adicionar" href="#"></b:navLink>
+            <b:navLink value="Ver"
+                       onclick="PF('verAmigo').show()"></b:navLink>
+        </b:dropMenu>
+
+
+        <b:navbarLinks pull="right" styleClass="hidden-xs"></b:navbarLinks>
+
+        <b:navLink value="Bem Vindo,#{usuarioMB.usuarioAtual.nome}"/>
+        <b:dropMenu value="Perfil">
+            <b:navLink value="Sair"
+                       onclick="PF('verAmigo').show()"></b:navLink>
+        </b:dropMenu>
+    </b:navBar>
+
+
+    <div align="center">
+        <h:form id="form-principal">
+            <p:growl id="msg"/>
+            <div class="ui-g" style="width: 100%; background-color: #a2b0dc;
+            border: 2px solid #737d9c !important;">
+                <div class="ui-g-2">
+                    <h2 style="margin-top: 10px; font-weight: bolder">
+                        Bartpapo
+                    </h2>
+                </div>
+                <div class="ui-g-7"></div>
+                <div class="ui-g-2">
+                    <p style="margin-top: 19px; font-weight: bold">
+                        Bem vindo, #{ usuarioMB.usuarioAtual.nome}
+                    </p>
+                </div>
+                <div class="ui-g-1 item-menu-header">
+                    <p:commandLink action="#{usuarioMB.sair()}">
+                        <p style="margin-top: 19px;">
+                            Sair
+                        </p>
+                    </p:commandLink>
+                </div>
+            </div>
+        </h:form>
+    </div>
+    <div class="ui-g" style="width: 100%; background-color: #bcccff; height: 100%; position: absolute;">
+        <div class="ui-g-6 item-menu-header">
+            <div class="ui-g-9">
+                <h3 style="margin-top: 10px;">Seus Amigo(s):</h3>
+            </div>
+            <div class="ui-g-3">
+                <p:commandButton style="width: 100%" actionListener="#{amigoMB.carregarAmigos()}"
+                                 update="formAddAmigo" onclick="PF('adicionarAmigo').show()"
+                                 value="Buscar Amigos" icon="pi pi-search"/>
+            </div>
+            <div class="ui-g-12">
+                <p:dataTable value="#{amigoMB.listaMeusAmigos}" var="amigo">
+                    <p:column headerText="Codigo Único de Usuário">
+                        <div align="center">
+                            <h:outputLabel value="#{amigo.cuu}"/>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="Nome">
+                        <div align="center">
+                            <h:outputLabel value="#{amigo.nome}"/>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="Email">
+                        <div align="center">
+                            <h:outputLabel value="#{amigo.email}"/>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="Telefone">
+                        <div align="center">
+                            <h:outputLabel value="#{amigo.telefone}"/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </div>
+        <div class="ui-g-6 item-menu-header">
+            <div class="ui-g-9">
+                <h3 style="margin-top: 10px;">Seus Grupo(s):</h3>
+            </div>
+            <div class="ui-g-3">
+                <p:commandButton style="width: 100%" actionListener="#{amigoMB.carregarAmigos()}"
+                                 onclick="PF('criarGrupo').show()"
+                                 value="Criar" icon="pi pi-plus"/>
+            </div>
+            <div class="ui-g-12">
+                <p:dataTable value="#{grupoMB.listarGrupos}" var="grupo">
+                    <p:column headerText="Id">
+                        <div align="center">
+                            <h:outputLabel value="#{grupo.id}"/>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="Nome">
+                        <div align="center">
+                            <h:outputLabel value="#{grupo.nome}"/>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="Descrição">
+                        <div align="center">
+                            <h:outputLabel value="#{grupo.descricao}"/>
+                        </div>
+                    </p:column>
+
+                </p:dataTable>
+            </div>
+        </div>
+    </div>
+
+
+    <p:dialog header="Criar Grupo" widgetVar="criarGrupo" width="562"
+              resizable="false" draggable="false">
+        <h:form id="form-criarGrupo">
+            <p:growl/>
+            <div class="ui-g">
+                <div class="ui-g-6">
+                    <p:outputLabel value="Nome: " for="nome-group"/>
+                </div>
+                <div class="ui-g-6">
+                    <p:inputText value="#{grupoMB.grupoCadastro.nome}" id="nome-group"/>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="Descrição: " for="desc-group"/>
+                </div>
+                <div class="ui-g-12">
+                    <p:inputTextarea value="#{grupoMB.grupoCadastro.descricao}"
+                                     style="width: 100%" id="desc-group"/>
+                </div>
+                <div class="ui-g-12">
+                    <p:commandButton value="Cancelar" onclick="PF('criarGrupo').hide()"
+                                     actionListener="#{grupoMB.limparGrupoCadastro()}" update="form-criarGrupo"
+                                     style="margin-right: 3px; width: 48%; background-color: darkred !important; color: black"/>
+                    <p:commandButton value="Cadastrar" update="form-criarGrupo"
+                                     actionListener="#{grupoMB.cadastrar()}"
+                                     style="width: 48%; background-color: darkgreen !important; color: black"/>
+                </div>
+            </div>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Ver Grupo(s)" widgetVar="verGrupo" resizable="false">
+
+
+
+    </p:dialog>
+
+    <p:dialog header="Adicionar Amigo" widgetVar="adicionarAmigo"
+              width="562" resizable="false" draggable="false">
+        <h:form id="formAddAmigo">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p:dataTable value="#{amigoMB.listaUsuarios}" var="usuario">
+
+                        <p:column headerText="Nome">
+                            <div align="center">
+                                <h:outputLabel value="#{usuario.nome}"/>
+                            </div>
+                        </p:column>
+
+                        <p:column headerText="Ações">
+                            <p:commandButton update="formAddAmigo, form-principal:msg" value="Adicionar Amigo"
+                                             action="#{amigoMB.cadastrarAmigo(usuario)}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </div>
+            </div>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog header="Ver Amigo(s)" widgetVar="verAmigo" resizable="false">
+
+    </p:dialog>
+</h:body>
+</html>
